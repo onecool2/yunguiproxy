@@ -1,0 +1,138 @@
+pragma solidity ^0.4.25;
+
+contract Ownable {
+
+
+    address public owner;
+    mapping (address=> bool) public mapWriter;
+
+    event OwnershipRenounced(address indexed previousOwner);
+    event OwnershipTransferred(
+        address indexed previousOwner,
+        address indexed newOwner
+    );
+
+  /**
+   * @dev The Ownable constructor sets the original `owner` of the contract to the sender
+   * account.
+   */
+    constructor() public {
+        owner = msg.sender;
+    }
+
+  /**
+   * @dev Throws if called by any account other than the owner.
+   */
+    modifier onlyOwner() {
+        require(msg.sender == owner);
+        _;
+    }
+
+    modifier onlyWriter() {
+        require(mapWriter[msg.sender]);
+        _;
+    }
+
+    function addWriter(address writer) public onlyOwner {
+        mapWriter[writer] = true;
+    }
+
+  /**
+   * @dev Allows the current owner to relinquish control of the contract.
+   * @notice Renouncing to ownership will leave the contract without an owner.
+   * It will not be possible to call the functions with the `onlyOwner`
+   * modifier anymore.
+   */
+
+    function renounceOwnership() public onlyOwner {
+        emit OwnershipRenounced(owner);
+        owner = address(0);
+    }
+
+  /**
+   * @dev Allows the current owner to transfer control of the contract to a newOwner.
+   * @param _newOwner The address to transfer ownership to.
+   */
+    function transferOwnership(address _newOwner) public onlyOwner {
+        _transferOwnership(_newOwner);
+    }
+
+  /**
+   * @dev Transfers control of the contract to a newOwner.
+   * @param _newOwner The address to transfer ownership to.
+   */
+    function _transferOwnership(address _newOwner) internal {
+        require(_newOwner != address(0));
+        emit OwnershipTransferred(owner, _newOwner);
+        owner = _newOwner;
+    }
+}
+
+contract YunguiContract is Ownable {
+
+    string [10000000000] public fridgeArray;
+    uint256 public fridge_index;
+    
+    string[10000000000] public ordersArray;
+    uint256 public orders_index;
+    
+    string[10000000000] public fridge_storageArray;
+    uint256 public fridge_storage_index;
+    
+    string[10000000000] public city_infoArray;
+    uint256 public city_info_index;
+
+    string[10000000000] public business_areaArray;
+    uint256 public business_area_index;
+    
+    string[10000000000] public business_districtArray;
+    uint256 public business_district_index;
+    
+    string[10000000000] public buildingArray;
+    uint256 public building_index;
+    
+    function fridge (string ss) onlyWriter public returns(uint256) {
+        fridgeArray[fridge_index] = ss;
+        fridge_index++;
+        return fridge_index;
+    }
+    
+    function orders (string ss) onlyWriter public returns(uint256) {
+        ordersArray[orders_index] = ss;
+        orders_index++;
+        return orders_index;
+    }
+    
+    function fridge_storage (string ss) onlyWriter public returns(uint256) {
+        fridge_storageArray[fridge_storage_index] = ss;
+        fridge_storage_index++;
+        return fridge_storage_index;
+    }
+    
+    function city_info(string ss) onlyWriter public returns(uint256){
+        city_infoArray[city_info_index] = ss;
+        city_info_index++;
+        return city_info_index;
+    }
+    
+    function business_area(string ss) onlyWriter public returns(uint256){
+        business_areaArray[business_area_index] = ss;
+        business_area_index++;
+        return business_area_index;
+    }
+    
+    function business_district(string ss) onlyWriter public returns(uint256){
+        business_districtArray[business_district_index] = ss;
+        business_district_index++;
+        return business_district_index;
+    }
+    
+    function building(string ss) onlyWriter public returns(uint256){
+        buildingArray[building_index] = ss;
+        building_index++;
+        return building_index;
+    }
+}
+
+
+
